@@ -1,0 +1,8 @@
+{
+    "distro_name": "mypackage",
+    "package_name": "mypackage",
+    "description": "one liner",
+    "author": "Your Name",
+    "author_email": "you@somewhere.com",
+    "version": "0.1.0"
+}
