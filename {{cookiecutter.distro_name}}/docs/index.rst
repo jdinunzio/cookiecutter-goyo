@@ -10,7 +10,7 @@ Welcome to {{cookiecutter.package_name}}'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   README
+   ../README
    project_structure
    architecture
    api

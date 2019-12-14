@@ -1,5 +1,4 @@
-Project Structure
-=================
+# Project Structure
 
 src
     This folder contains *all* the source code of this distribution.
@@ -33,4 +32,3 @@ docs/build
 scripts
     This folder contain helpful scripts required to build the project, its docker image, and deployment. *NO application
     code* should reside in this folder.
-

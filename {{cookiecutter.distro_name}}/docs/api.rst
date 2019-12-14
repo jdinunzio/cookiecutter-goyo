@@ -1,6 +1,5 @@
 API Docs
 ========
 
-.. automodule:: mypackage.sample
+.. automodule:: mypackage.sum
     :members:
-

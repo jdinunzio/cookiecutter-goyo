@@ -1,5 +1,4 @@
-Architecture
-============
+# Architecture
 
 FIXME: Add here a description of the architecture of the project.
 
@@ -14,8 +13,7 @@ You should document:
 * Entities and relations.
 * System components and their relationships.
 
-Links
------
+## Links
 
 * https://c4model.com/
 * https://github.com/RicardoNiepel/C4-PlantUML
