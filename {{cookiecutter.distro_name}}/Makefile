@@ -1,6 +1,8 @@
 .PHONY: help test-unit test-integration tests lint typecheck black-check black-fix coverage docs
-.PHONY: report-test-unit report-test-integration report-test report-lint
+.PHONY: report-test-unit report-test-integration report-test report-lint project-init
 
+# General Configuration
+SHELL               := /bin/bash
 # Sphinx Configuration
 SPHINXOPTS          =
 SPHINXBUILD         = sphinx-build
@@ -53,3 +55,6 @@ report-lint:               ## Generate text and junit report for linting
 	@flake8 . --output-file=reports/flake8.txt
 	@flake8_junit reports/flake8.txt reports/junit/lint/flake8_junit.xml
 
+project-init:              ## Initializes virtual environment for this project
+	@python -m venv .venv
+	@source .venv/bin/activate && pip install -U pip && pip install poetry && poetry install
