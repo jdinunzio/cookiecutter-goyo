@@ -7,7 +7,7 @@ from unittest import TestCase
 class TestSum(TestCase):
 
     @classmethod
-    def setupClass(cls):
+    def setUpClass(cls):
         cls.sum = Sum()
 
     def test_sum(self):
