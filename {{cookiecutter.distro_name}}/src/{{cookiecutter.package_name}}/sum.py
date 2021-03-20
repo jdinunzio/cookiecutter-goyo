@@ -2,14 +2,17 @@
 """sum module documentation. It's always nice to have module docs"""
 
 
-class Sum:
+class Sum:  # pylint: disable=too-few-public-methods
     """Sum class. This class implements the sum of two numbers."""
 
-    def sum(self, a: float, b: float) -> float:
-        """Sums two numbers.
+    def sum(self, operand_a: float, operand_b: float) -> float:  # pylint: disable=no-self-use
+        """Sum two numbers.
 
-        :param a: First Operand.
-        :param b: Second Operand.
-        :returns: Sum of a and b.
+        Args:
+            operand_a: First Operand.
+            operand_b: Second Operand.
+
+        Returns:
+            Sum of a and b.
         """
-        return a + b
+        return operand_a + operand_b

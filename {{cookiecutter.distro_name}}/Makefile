@@ -24,16 +24,40 @@ tests:                     ## Run all tests
 	@make test-integration
 
 lint:                      ## Code Linting
-	@pylint src
+	@pylint --rcfile=.pylintrc src tests
+
+flake:                     ## Flake-8
+	@flake8 --config=.flake8 src tests
+
+pydocstyle:                ## Check Style of docstrings
+	@pydocstyle --config=./.pydocstylerc src/ tests/
 
 typecheck:                 ## Typecheck
-	@mypy src/
+	@mypy --config-file .mypy.ini src tests
+
+safety:                    ## Check for security vulnerabilities in current environment
+	@safety check
 
 black-check:               ## Code checking with black
-	@black --line-length 100 --check --skip-string-normalization --diff src tests
+	@black --line-length 100 --check --diff src tests
 
 black-fix:                 ## Code formatting with black
-	@black --line-length 100 --skip-string-normalization src tests
+	@black --line-length 100 src tests
+
+dev-check:                 ## Run common development checks
+	@echo '**** Linting....'
+	@make --no-print-directory lint
+	@echo -e '\n\n**** Flaking...'
+	@make --no-print-directory flake
+	@echo -e '\n\n**** Blacking...'
+	@make --no-print-directory black-check
+	@echo -e '\n\n**** Docstyling...'
+	@make --no-print-directory pydocstyle
+	@echo -e '\n\n**** Type checking...'
+	@make --no-print-directory typecheck
+	@echo -e '\n\n**** Unit Testing...'
+	@make --no-print-directory test-unit
+	@echo -e '\n\n'
 
 coverage:                  ## Code coverage
 	@green --run-coverage test/unit
