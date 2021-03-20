@@ -17,7 +17,13 @@ Cookiecutter template to create new, modern python projects.
 
 ## Pre-Requisits
 
-Install `cookiecutter`
+You can use `pipenv` to install all this packages dependencies:
+
+```bash
+pipenv install
+```
+
+Alternatively, you can install `cookiecutter` manually:
 
 ```bash
 pip install cookiecutter
