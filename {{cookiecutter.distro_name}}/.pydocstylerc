@@ -1,0 +1,22 @@
+[pydocstyle]
+ignore = D100, D105, D106, D107, D203, D211, D213, D400, D405, D406, D407, D413
+match = (?!test_)(?!__init__).*\.py
+match-dir=^(?!(tests|migrations)).*[pydocstyle]
+#inherit = false
+
+# NOTE: From http://www.pydocstyle.org/en/stable/usage.html#in-file-configuration
+#
+# pydocstyle supports inline commenting to skip specific checks on specific functions
+# or methods. The supported comments that can be added are:
+#
+#    "# noqa" skips all checks.
+#    "# noqa: D102,D203" can be used to skip specific checks. Note that this is compatible
+#             with skips from flake8, e.g. # noqa: D102,E501,D203.
+#
+# For example, this will skip the check for a period at the end of a function docstring:
+#
+#    def bad_function():  # noqa: D400
+#        """Omit a period in the docstring as an exception"""
+#        pass
+
+

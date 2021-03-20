@@ -45,21 +45,26 @@ poetry update
 
 `Makefile` offers you a lot of commonly used task:
 
-    help:                       Show this help
-    test-unit:                  Run unit tests
-    test-integration:           Run integration tests
-    tests:                      Run all tests
-    lint:                       Code Linting
-    typecheck:                  Typecheck
-    black-check:                Code checking with black
-    black-fix:                  Code formatting with black
-    coverage:                   Code coverage
-    docs:                       Build documentation
-    report-test-unit:           Generate junit report for unit tests
-    report-test-integration:    Generate junit report for integration tests
-    report-test:                Generate junit report for tests
-    report-lint:                Generate text and junit report for linting
-    project-init:               Initializes virtual environment for this project
+	help:                       Show this help
+	test-unit:                  Run unit tests
+	test-integration:           Run integration tests
+	tests:                      Run all tests
+	lint:                       Code Linting
+	flake:                      Flake-8
+	pydocstyle:                 Check Style of docstrings
+	typecheck:                  Typecheck
+	safety:                     Check for security vulnerabilities in current environment
+	black-check:                Code checking with black
+	black-fix:                  Code formatting with black
+	dev-check:                  Run common development checks
+	coverage:                   Code coverage
+	docs:                       Build documentation
+	report-test-unit:           Generate junit report for unit tests
+	report-test-integration:    Generate junit report for integration tests
+	report-test:                Generate junit report for tests
+	report-lint:                Generate text and junit report for linting
+	project-init:               Initializes virtual environment for this project
+
 
 # Links
 -----
