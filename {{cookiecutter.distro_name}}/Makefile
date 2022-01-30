@@ -1,14 +1,8 @@
-.PHONY: help test-unit test-integration tests lint typecheck black-check black-fix coverage docs
+.PHONY: help test-unit test-integration tests lint typecheck black-check black-fix coverage
 .PHONY: report-test-unit report-test-integration report-test report-lint project-init
 
 # General Configuration
 SHELL               := /bin/bash
-# Sphinx Configuration
-SPHINXOPTS          =
-SPHINXBUILD         = sphinx-build
-SPHINXPROJ          = cookiecutterpackage_name
-SPHINXSOURCEDIR     = docs
-SPHINXBUILDDIR      = docs/_build
 
 help:                      ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
@@ -61,9 +55,6 @@ dev-check:                 ## Run common development checks
 
 coverage:                  ## Code coverage
 	@green --run-coverage test/unit
-
-docs:                      ## Build documentation
-	@$(SPHINXBUILD) -M html "$(SPHINXSOURCEDIR)" "$(SPHINXBUILDDIR)" $(SPHINXOPTS) $(O)
 
 report-test-unit:          ## Generate junit report for unit tests
 	@python -m xmlrunner discover -o ./reports/junit/tests/unit tests/unit/

@@ -1,4 +1,4 @@
 tmp/
 .venv/
-.src/
+src
 .python-version
