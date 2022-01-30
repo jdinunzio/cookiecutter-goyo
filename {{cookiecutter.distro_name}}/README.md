@@ -58,7 +58,6 @@ poetry update
 	black-fix:                  Code formatting with black
 	dev-check:                  Run common development checks
 	coverage:                   Code coverage
-	docs:                       Build documentation
 	report-test-unit:           Generate junit report for unit tests
 	report-test-integration:    Generate junit report for integration tests
 	report-test:                Generate junit report for tests
