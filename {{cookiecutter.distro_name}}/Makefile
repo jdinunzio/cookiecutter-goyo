@@ -8,25 +8,25 @@ help:                      ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 lint:                      ## Code Linting
-	@pylint --rcfile=.pylintrc src tests
+	@pylint src tests
 
 flake:                     ## Flake-8
 	@flake8 --config=.flake8 src tests
 
 pydocstyle:                ## Check Style of docstrings
-	@pydocstyle --config=./.pydocstylerc src/ tests/
+	@pydocstyle src/ tests/
 
 typecheck:                 ## Typecheck
-	@mypy --config-file .mypy.ini src tests
+	@mypy src tests
 
 safety:                    ## Check for security vulnerabilities in current environment
 	@safety check
 
 black-check:               ## Code checking with black
-	@black --line-length 100 --check --diff src tests
+	@black --check --diff src tests
 
 black-fix:                 ## Code formatting with black
-	@black --line-length 100 src tests
+	@black src tests
 
 dev-check:                 ## Run common development checks
 	@echo '**** Linting....'
