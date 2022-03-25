@@ -1,4 +1,4 @@
-.PHONY: help test-unit test-integration tests lint typecheck black-check black-fix coverage
+.PHONY: help lint typecheck black-check black-fix test-unit test-integration tests coverage
 .PHONY: report-test-unit report-test-integration report-test report-lint project-init
 
 # General Configuration
@@ -6,16 +6,6 @@ SHELL               := /bin/bash
 
 help:                      ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
-
-test-unit:                 ## Run unit tests
-	@green tests/unit
-
-test-integration:          ## Run integration tests
-	@green tests/integration
-
-tests:                     ## Run all tests
-	@make test-unit
-	@make test-integration
 
 lint:                      ## Code Linting
 	@pylint --rcfile=.pylintrc src tests
@@ -52,6 +42,16 @@ dev-check:                 ## Run common development checks
 	@echo -e '\n\n**** Unit Testing...'
 	@make --no-print-directory test-unit
 	@echo -e '\n\n'
+
+test-unit:                 ## Run unit tests
+	@green tests/unit
+
+test-integration:          ## Run integration tests
+	@green tests/integration
+
+tests:                     ## Run all tests
+	@make test-unit
+	@make test-integration
 
 coverage:                  ## Code coverage
 	@green --run-coverage test/unit
