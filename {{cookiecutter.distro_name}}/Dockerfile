@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.10-slim
 WORKDIR /app
 
 RUN apt-get update && \
@@ -15,7 +15,7 @@ RUN chown -R appuser:appuser /app/
 COPY --chown=appuser:appuser .pip.conf /etc/pip.conf
 
 # NOTE: This will install the packages in this app in the system package folder
-# (/usr/local/lib/python3.8/site-packages/{{cookiecutter.distro_name}}), so if you need to edit files inside the docker
+# (/usr/local/lib/python3.10/site-packages/{{cookiecutter.distro_name}}), so if you need to edit files inside the docker
 # image, don't edit src/
 RUN pip install .
 
