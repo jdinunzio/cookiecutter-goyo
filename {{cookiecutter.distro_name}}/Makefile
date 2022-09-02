@@ -8,21 +8,27 @@ help:                      ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 lint:                      ## Code Linting
+	@pylint --version
 	@pylint src tests
 
 flake:                     ## Flake-8
+	@flake8 --version
 	@flake8 --config=.flake8 src tests
 
 pydocstyle:                ## Check Style of docstrings
+	@pydocstyle --version
 	@pydocstyle src/ tests/
 
 typecheck:                 ## Typecheck
+	@mypy --version
 	@mypy src tests
 
 safety:                    ## Check for security vulnerabilities in current environment
+	@safety --version
 	@safety check
 
 black-check:               ## Code checking with black
+	@black --version
 	@black --check --diff src tests
 
 black-fix:                 ## Code formatting with black
@@ -44,17 +50,17 @@ dev-check:                 ## Run common development checks
 	@echo -e '\n\n'
 
 test-unit:                 ## Run unit tests
-	@green tests/unit
+	@green -vvvq tests/unit
 
 test-integration:          ## Run integration tests
-	@green tests/integration
+	@green -vvvq tests/integration
 
 tests:                     ## Run all tests
 	@make test-unit
 	@make test-integration
 
 coverage:                  ## Code coverage
-	@green --run-coverage test/unit
+	@green -vvvq --run-coverage test/unit
 
 report-test-unit:          ## Generate junit report for unit tests
 	@python -m xmlrunner discover -o ./reports/junit/tests/unit tests/unit/
