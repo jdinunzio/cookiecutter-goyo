@@ -5,15 +5,17 @@ Cookiecutter template to create new, modern python projects.
 ## Features
 
 * Use of `pyproject.toml` for package configuration.
-* Unit and integration tests with `unittest`, `pytest` or `green`.
+* Support for clean architecture.
+* Developer friendly command invocation with `make`.
+* Unit and integration tests with `unittest`, or `green`.
 * Linting with `flake8` and `pylint`.
 * Typechecking with `mypy`.
 * Code coverage with `coverage`.
-* Code reformating with `black`.
+* Code reformatting with `black`.
 * Reporting of test and linting results in `junit`.
 * Sane `.gitignore`.
 
-## Pre-Requisits
+## Pre-Requisites
 
 You can use `pipenv` to install all this packages dependencies:
 
