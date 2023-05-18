@@ -1,0 +1,4 @@
+.venv
+builds
+*/{{cookiecutter.package_name}}.egg-info*
+tmp
