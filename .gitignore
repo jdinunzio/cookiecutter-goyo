@@ -1,5 +1,6 @@
 tmp/
 .venv/
-src
+__pycache__/
+cookie-src
 .python-version
 .idea

@@ -8,15 +8,17 @@ SHELL               := /bin/bash
 help:                      ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
-# #
-# #Run Services
-# #
-#
-#run-be-dev:                # # Run backend in foreground, in development mode
-#	@UVICORN_EXTRA_PARAMS="--reload" poetry run src/{{cookiecutter.package_name}}/presentation/be_service.sh
-#
-#run-be:                    # # Run backend in foreground
-#	poetry run src/{{cookiecutter.package_name}}/presentation/be_service.sh
+{% if cookiecutter.add_fastapi_application %}
+##
+##Run Services
+##
+
+run-be-dev:                # # Run backend in foreground, in development mode
+	@UVICORN_EXTRA_PARAMS="--reload" poetry run src/{{cookiecutter.package_name}}/presentation/be_service.sh
+
+run-be:                    # # Run backend in foreground
+	poetry run src/{{cookiecutter.package_name}}/presentation/be_service.sh
+{% endif %}
 
 ##
 ##Development
@@ -110,4 +112,4 @@ report-lint:               ## Generate text and junit report for linting
 
 project-init:              ## Initializes virtual environment for this project
 	@python -m venv .venv
-	@source .venv/bin/activate && pip install -U pip && pip install poetry && poetry install
+	@source .venv/bin/activate && pip install -U pip && pip install poetry==1.4 && poetry install

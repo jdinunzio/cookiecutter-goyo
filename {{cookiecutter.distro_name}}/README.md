@@ -56,6 +56,14 @@ You can create multiple dependency groups. This projects used `dev`, `test`, and
 
     help:                       Show this help
 
+{% if cookiecutter.add_fastapi_application %}
+   
+    Run Services
+
+    run-be-dev:                Run backend in foreground, in development mode
+    run-be:                    Run backend in foreground
+{% endif %}
+
     Development
 
     lint:                       Code Linting

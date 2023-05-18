@@ -2,29 +2,86 @@ import sys
 import shutil
 from pathlib import Path
 
+def fix_boolean(string) -> bool:
+    """Filter to fix boolean variables.
+
+    Cookiecutter's json file allows defining boolean variables, but a bug in v2.1.1 makes those
+    variables strings. This filter converts them back to booleans.
+    """
+    return string.lower() in ["true", "t", "y", "yes", "1"]
+
 
 package_name = "{{cookiecutter.package_name}}"
-use_clean_architecture = "{{cookiecutter.use_clean_architecture}}".lower() == "y"
-package_path = Path("src") / package_name
+root_path = Path(".").absolute()
+package_path = root_path / "src" / package_name
+test_path = root_path / "tests"
+use_clean_architecture = fix_boolean("{{cookiecutter.use_clean_architecture}}")
+add_fastapi_application = fix_boolean("{{cookiecutter.add_fastapi_application}}")
+add_repository_and_sqlalchemy = fix_boolean("{{cookiecutter.add_repository_and_sqlalchemy}}")
 
 
 def remove_clean_architecture():
     """Remove files related to clean architecture."""
     print("Removing clean architecture files from project...")
-    for folder in ["domain", "application", "infrastructure", "presentation"]:
-        folder_path = package_path / folder
-        shutil.rmtree(folder_path)
-    print("Removing of clean architecture files completed.")
+    paths_to_remove = {
+        package_path: ["domain", "application", "infrastructure", "presentation"],
+        test_path:  [
+            "unit/domain", "unit/application", "unit/infrastructure", "unit/presentation",
+            "integration/domain", "integration/application", "integration/infrastructure",
+            "integration/presentation",
+        ],
+    }
+    remove_paths(paths_to_remove)
+    print("Remotion of clean architecture files completed.")
 
 
 def remove_sample_files():
     """Remove sample module and unit test."""
     print("Removing sample files from project...")
-    test_path = Path("tests")
-    sample_file_paths = [package_path / "sum.py", test_path / "unit" / "test_sum.py"]
-    for file_path in sample_file_paths:
-        file_path.unlink()
-    print("Removing of sample files completed.")
+    paths_to_remove = {
+        package_path: ["sum.py"],
+        test_path: ["unit/test_sum.py"],
+    }
+    remove_paths(paths_to_remove)
+    print("Remotion of sample files completed.")
+
+
+def remove_fastapi():
+    """Remove fastapi code."""
+    print("Removing FastAPI files from project...")
+    paths_to_remove = {
+        package_path: [ "infrastructure/server", "presentation/be_server.sh"],
+    }
+    remove_paths(paths_to_remove)
+    print("Remotion of FastAPI files completed.")
+
+
+def remove_repository_and_sqlalchemy():
+    """Remove repository and sqlalchemy code."""
+    print("Removing Repository and SQLAlchemy files from project...")
+    paths_to_remove = {
+        package_path: [ "infrastructure/server/repoutils.py"],
+    }
+    remove_paths(paths_to_remove)
+    print("Remotion of repository and SQLAlchemy files completed.")
+
+
+def remove_paths(paths_to_remove: dict[Path, list[str]]) -> None:
+    """Remove items in paths.
+
+    Args:
+        paths_to_remove: Dict with path prefixes and list of items to remove.
+    """
+    for base_path, item_list in paths_to_remove.items():
+        for item in item_list:
+            item_path = base_path / item
+            try:
+                if item_path.is_file():
+                    item_path.unlink()
+                else:
+                    shutil.rmtree(item_path)
+            except FileNotFoundError:
+                pass
 
 
 def main():
@@ -33,6 +90,10 @@ def main():
         remove_clean_architecture()
     else:
         remove_sample_files()
+    if not add_fastapi_application:
+        remove_fastapi()
+    if not add_repository_and_sqlalchemy:
+        remove_repository_and_sqlalchemy()
     sys.exit(0)
 
 

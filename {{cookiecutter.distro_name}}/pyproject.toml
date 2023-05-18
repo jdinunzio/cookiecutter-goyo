@@ -4,13 +4,31 @@ version = "{{cookiecutter.version}}"
 description = "{{cookiecutter.description}}"
 authors = ["{{cookiecutter.author}} <{{cookiecutter.author_email}}>"]
 
+
 [tool.poetry.dependencies]
 python = "^3.11"
 pip = "^22.2.2"
+starlette = "^0.27.0"  # for its config and .env features
+{#- cookicutter 2.1.1 has a bug where cookiecutter.json boolean vars are converted to string -#}
+{%- if cookiecutter.use_clean_architecture | fix_boolean %}
+  {%- if cookiecutter.add_fastapi_application | fix_boolean %}
+fastapi = "^0.95.1"
+uvicorn = "^0.21.1"
+  {%- endif %}
+  {%- if cookiecutter.add_repository_and_sqlalchemy  | fix_boolean %}
+psycopg2-binary = "^2.9.6"
+sqlalchemy = "^2.0.12"
+  {%- endif %}
+  {%- if cookiecutter.add_fastapi_application  | fix_boolean or cookiecutter.add_fastapi_application  | fix_boolean %}
+pydantic = "^1.10.7"
+pytz = "^2023.3"
+  {%- endif %}
+{%- endif %}
+
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.8.0"
-coverage = {extras = ["toml"], version = "^6.4.4"}
+black = "^22.12.0"
+coverage = {extras = ["toml"], version = "^6.5.0"}
 flake8 = "^4.0.1"
 flake8-assertive = "^1.3.0"
 flake8-junit-report = "^2.1"
@@ -22,10 +40,15 @@ pylint = "^2.15.0"
 ruff = "^0.0.262"
 safety = "^1.10.3"
 unittest-xml-reporting = "^2.5.2"
-
+{%- if cookiecutter.use_clean_architecture | fix_boolean and  cookiecutter.add_fastapi_application | fix_boolean %}
+types-pytz = "^2023.3.0.0"
+{%- endif %}
 
 [tool.poetry.group.test.dependencies]
 green = "^3.4.3"
+{%- if cookiecutter.use_clean_architecture | fix_boolean and  cookiecutter.add_fastapi_application | fix_boolean %}
+httpx = "^0.24.1"
+{%- endif %}
 
 
 [build-system]
@@ -85,7 +108,7 @@ exclude_lines = [
 # or in whole files adding this comment at the top:
 #
 #    # mypy: ignore-errors
-python_version = 3.10
+python_version = 3.11
 # warn_return_any = true
 warn_unused_configs = true
 exclude = ".venv"
@@ -98,6 +121,7 @@ exclude = ".venv"
 #
 # [tool.mypy-somelibrary]
 # ignore_missing_imports = true
+
 
 [tool.pydocstyle]
 # From http://www.pydocstyle.org/en/stable/usage.html#in-file-configuration
