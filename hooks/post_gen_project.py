@@ -2,22 +2,14 @@ import sys
 import shutil
 from pathlib import Path
 
-def fix_boolean(string) -> bool:
-    """Filter to fix boolean variables.
-
-    Cookiecutter's json file allows defining boolean variables, but a bug in v2.1.1 makes those
-    variables strings. This filter converts them back to booleans.
-    """
-    return string.lower() in ["true", "t", "y", "yes", "1"]
-
 
 package_name = "{{cookiecutter.package_name}}"
 root_path = Path(".").absolute()
 package_path = root_path / "src" / package_name
 test_path = root_path / "tests"
-use_clean_architecture = fix_boolean("{{cookiecutter.use_clean_architecture}}")
-add_fastapi_application = fix_boolean("{{cookiecutter.add_fastapi_application}}")
-add_repository_and_sqlalchemy = fix_boolean("{{cookiecutter.add_repository_and_sqlalchemy}}")
+use_clean_architecture = "{{cookiecutter.use_clean_architecture}}"
+add_fastapi_application = "{{cookiecutter.add_fastapi_application}}"
+add_repository_and_sqlalchemy = "{{cookiecutter.add_repository_and_sqlalchemy}}"
 
 
 def remove_clean_architecture():
@@ -60,7 +52,15 @@ def remove_repository_and_sqlalchemy():
     """Remove repository and sqlalchemy code."""
     print("Removing Repository and SQLAlchemy files from project...")
     paths_to_remove = {
-        package_path: [ "infrastructure/server/repoutils.py"],
+        package_path: [
+            "application/interfaces/db",
+            "domain/todo.py",
+            "domain/todolist.py",
+            "infrastructure/adapters/alchemy",
+            "tests/unit/domain/todo.py",
+            "tests/unit/domain/todolist.py",
+            "tests/integration/adapters/alchemy",
+        ],
     }
     remove_paths(paths_to_remove)
     print("Remotion of repository and SQLAlchemy files completed.")

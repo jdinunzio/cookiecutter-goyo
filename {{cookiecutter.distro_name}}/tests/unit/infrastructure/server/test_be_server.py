@@ -17,10 +17,10 @@ class TestBeServer(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """Preparation steps that are executed once for the entire test case."""
-        cls.app = create_app(FactoryType.LOCAL_TEST)
+        cls.app = create_app(FactoryType.SIMPLE_ENV)
         cls.client = TestClient(cls.app)
 
-    def test_has_healthy_check_endpoints(self):
+    def test_has_healthy_check_endpoints(self) -> None:
         """be_server should have end-points to check for health status (liveness and readiness).
 
         Given an instance of BE server

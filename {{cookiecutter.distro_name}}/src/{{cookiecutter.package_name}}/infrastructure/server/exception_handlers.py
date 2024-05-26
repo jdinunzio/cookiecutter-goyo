@@ -1,14 +1,15 @@
 from http import HTTPStatus
+from typing import cast
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 
-from {{cookiecutter.package_name}}.application.exceptions import UseCaseException
+from {{cookiecutter.package_name}}.application.exceptions import UseCaseError
 
 
-def request_validation_handler(request: Request, error: RequestValidationError) -> JSONResponse:
+def request_validation_handler(request: Request, error: Exception) -> Response:
     """Handle FastAPI/pydantic RequestValidationErrors during FastAPI request processing.
 
     Args:
@@ -24,8 +25,8 @@ def request_validation_handler(request: Request, error: RequestValidationError) 
     )
 
 
-def use_case_exception_handler(request: Request, error: UseCaseException) -> JSONResponse:
-    """Handle Use Case during FastAPI request processing.
+def use_case_exception_handler(request: Request, error: Exception) -> Response:
+    """Handle Use Case exception during FastAPI request processing.
 
     Args:
         request: HTTP Request that caused the error.
@@ -36,11 +37,11 @@ def use_case_exception_handler(request: Request, error: UseCaseException) -> JSO
     """
     return JSONResponse(
         status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-        content={"request_url": str(request.url), "message": error.message},
+        content={"request_url": str(request.url), "message": cast(UseCaseError, error).message},
     )
 
 
-def generic_exception_handler(request: Request, error: Exception) -> JSONResponse:
+def generic_exception_handler(request: Request, error: Exception) -> Response:
     """Handle generic exceptions during FastAPI request processing.
 
     Args:
@@ -63,5 +64,5 @@ def add_exception_handlers(app: FastAPI) -> None:
         app: FastAPI application to add routers to.
     """
     app.add_exception_handler(RequestValidationError, request_validation_handler)
-    app.add_exception_handler(UseCaseException, use_case_exception_handler)
+    app.add_exception_handler(UseCaseError, use_case_exception_handler)
     app.add_exception_handler(Exception, generic_exception_handler)

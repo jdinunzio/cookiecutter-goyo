@@ -3,13 +3,13 @@ from enum import Enum
 from {{cookiecutter.package_name}}.application.interfaces.factory import Factory
 from {{cookiecutter.package_name}}.infrastructure.adapters.config import ENV_TYPE
 
-from .localtest import LocalTestFactory
+from .simpleenvfactory import SimpleEnvFactory
 
 
 class FactoryType(str, Enum):
     """Enumeration of factories."""
 
-    LOCAL_TEST = "localtest"
+    SIMPLE_ENV = "simple"
 
 
 def get_factory(env_type: str | None = None) -> Factory:
@@ -23,8 +23,8 @@ def get_factory(env_type: str | None = None) -> Factory:
         Concrete implementation of Payment Gateway Abstract Factory.
     """
     env_type = env_type if env_type is not None else ENV_TYPE
-    if env_type == FactoryType.LOCAL_TEST:
-        factory = LocalTestFactory()
-        return factory
+    if env_type == FactoryType.SIMPLE_ENV:
+        return SimpleEnvFactory()
 
-    raise RuntimeError(f"Factory for {env_type=!r} unknown.")
+    error_msg = f"Factory for {env_type=!r} unknown."
+    raise RuntimeError(error_msg)

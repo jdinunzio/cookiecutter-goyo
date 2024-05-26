@@ -3,90 +3,108 @@
 .PHONY: report-test-unit report-test-integration report-test report-lint project-init
 
 # General Configuration
-SHELL               := /bin/bash
+#SHELL               := /bin/bash
+TEST_LOG_LEVEL       := error
+INTEG_DB_NAME        := integ.db
 
 help:                      ## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
-{% if cookiecutter.add_fastapi_application %}
+
 ##
 ##Run Services
 ##
 
-run-be-dev:                # # Run backend in foreground, in development mode
-	@UVICORN_EXTRA_PARAMS="--reload" poetry run src/{{cookiecutter.package_name}}/presentation/be_service.sh
+run-be-dev:                ## Run backend in foreground, in development mode
+	@UVICORN_EXTRA_PARAMS="--reload" poetry run src/{{cookiecutter.package_name}}/presentation/be_server.sh
 
-run-be:                    # # Run backend in foreground
-	poetry run src/{{cookiecutter.package_name}}/presentation/be_service.sh
-{% endif %}
+run-be:                    ## Run backend in foreground
+	poetry run src/{{cookiecutter.package_name}}/presentation/be_server.sh
+
 
 ##
 ##Development
 ##
 
 lint:                      ## Code Linting
+	@echo -en '\033[33m'
 	@poetry run pylint --version
+	@echo -en '\033[0m'
 	@poetry run pylint src tests
 
 flake:                     ## Flake-8 and ruff
+	@echo -en '\033[33m'
 	@poetry run ruff --version
-	@poetry run ruff src tests
-	@poetry run flake8 --version
-	@poetry run flake8 --config=.flake8 src tests
+	@echo -en '\033[0m'
+	@poetry run ruff check src tests
+	@echo -e '\033[33m'
+	@echo -n "flake " && poetry run flake8 --version
+	@echo -en '\033[0m'
+	@poetry run flake8 --config=.flake8 src tests && echo "All checks passed!"
 
 docstyle:                  ## Check Style of docstrings
-	@poetry run pydocstyle --version
-	@poetry run pydocstyle src/ tests/
+	@echo -en '\033[33m'
+	@echo -n "pydocstyle " && poetry run pydocstyle --version
+	@echo -en '\033[0m'
+	@poetry run pydocstyle src/ tests/ && echo "All checks passed!"
 
 typecheck:                 ## Typecheck
+	@echo -en '\033[33m'
 	@poetry run mypy --version
+	@echo -en '\033[0m'
 	@poetry run mypy src tests
 
 black-check:               ## Code checking with black
+	@echo -en '\033[33m'
 	@poetry run black --version
+	@echo -en '\033[0m'
 	@poetry run black --check --diff src tests
 
 black-fix:                 ## Code formatting with black
-	@poetry run isort src test
+	@poetry run isort src tests
 	@poetry run black src tests
 
 dev-check:                 ## Run common development checks
-	@echo '**** Linting....'
+	@echo -e '\033[34m**** Linting...\033[0m'
 	@make --no-print-directory lint
-	@echo -e '\n\n**** Flaking...'
+	@echo -e '\033[34m\n**** Flaking...\033[0m'
 	@make --no-print-directory flake
-	@echo -e '\n\n**** Blacking...'
+	@echo -e '\033[34m\n\n**** Blacking...\033[0m'
 	@make --no-print-directory black-check
-	@echo -e '\n\n**** Docstyling...'
+	@echo -e '\033[34m\n\n**** Docstyling...\033[0m'
 	@make --no-print-directory docstyle
-	@echo -e '\n\n**** Type checking...'
+	@echo -e '\033[34m\n\n**** Type checking...\033[0m'
 	@make --no-print-directory typecheck
-	@echo -e '\n\n**** Unit Testing...'
+	@echo -e '\033[34m\n\n**** Unit Testing...\033[0m'
 	@make --no-print-directory test-unit
-	@echo -e '\n\n'
+	@echo -e '\033[34m\n\n**** Integration Testing...\033[0m'
+	@make --no-print-directory test-integration
+	@echo -e '\n'
 
 ##
 ##Testing
 ##
 
 test-unit:                 ## Run unit tests
-	@poetry run green -vvvq tests/unit
+	@LOG_LEVEL=${TEST_LOG_LEVEL} poetry run green -vvvq tests/unit
 
 test-integration:          ## Run integration tests
-	@poetry run green -vvvq tests/integration
+	@rm -f ${INTEG_DB_NAME}
+	@LOG_LEVEL=${TEST_LOG_LEVEL} SQLITE_DB_NAME=${INTEG_DB_NAME} poetry run green -vvvq -s 1 tests/integration
 
 tests:                     ## Run all tests
-	@make test-unit
-	@make test-integration
+	@make --no-print-directory test-unit
+	@make --no-print-directory test-integration
 
 coverage:                  ## Code coverage
-	@poetry run green -vvvq --run-coverage test/unit
+	@rm -f ${INTEG_DB_NAME}
+	@LOG_LEVEL=${TEST_LOG_LEVEL} SQLITE_DB_NAME=${INTEG_DB_NAME} poetry run green -vvvq -s 1 --run-coverage tests/
 
 report-test-unit:          ## Generate junit report for unit tests
-	@poetry run python -m xmlrunner discover -o ./reports/junit/tests/unit tests/unit/
+	@LOG_LEVEL=${TEST_LOG_LEVEL} poetry run python -m xmlrunner discover -o ./reports/junit/tests/unit tests/unit/
 
 report-test-integration:   ## Generate junit report for integration tests
-	@poetry run python -m xmlrunner discover -o ./reports/junit/tests/integration tests/integration/
+	@LOG_LEVEL=${TEST_LOG_LEVEL} poetry run python -m xmlrunner discover -o ./reports/junit/tests/integration tests/integration/
 
 report-test:               ## Generate junit report for tests
 	@make report-test-unit
@@ -112,4 +130,4 @@ report-lint:               ## Generate text and junit report for linting
 
 project-init:              ## Initializes virtual environment for this project
 	@python -m venv .venv
-	@source .venv/bin/activate && pip install -U pip && pip install poetry==1.4 && poetry install
+	@source .venv/bin/activate && pip install -U pip && pip install "poetry>1.8" && poetry install
