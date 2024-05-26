@@ -6,53 +6,54 @@ authors = ["{{cookiecutter.author}} <{{cookiecutter.author_email}}>"]
 
 
 [tool.poetry.dependencies]
-python = "^3.11"
-pip = "^22.2.2"
-starlette = "^0.27.0"  # for its config and .env features
-{#- cookicutter 2.1.1 has a bug where cookiecutter.json boolean vars are converted to string -#}
-{%- if cookiecutter.use_clean_architecture | fix_boolean %}
-  {%- if cookiecutter.add_fastapi_application | fix_boolean %}
-fastapi = "^0.95.1"
-uvicorn = "^0.21.1"
+python = "^3.12.2"
+pip = "^24.0"
+starlette = "^0.37"  # for its config and .env features
+python-json-logger = "^2.0.7"
+{%- if cookiecutter.use_clean_architecture %}
+  {%- if cookiecutter.add_fastapi_application %}
+fastapi = "^0.111"
+uvicorn = "^0.29"
   {%- endif %}
-  {%- if cookiecutter.add_repository_and_sqlalchemy  | fix_boolean %}
-psycopg2-binary = "^2.9.6"
-sqlalchemy = "^2.0.12"
+  {%- if cookiecutter.add_repository_and_sqlalchemy  %}
+psycopg2-binary = "^2.9.9"
+sqlalchemy = "^2.0.30"
   {%- endif %}
-  {%- if cookiecutter.add_fastapi_application  | fix_boolean or cookiecutter.add_fastapi_application  | fix_boolean %}
-pydantic = "^1.10.7"
-pytz = "^2023.3"
+  {%- if cookiecutter.add_fastapi_application  or cookiecutter.add_fastapi_application %}
+pydantic = "^2.7"
+pytz = "^2024.1"
   {%- endif %}
 {%- endif %}
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
-coverage = {extras = ["toml"], version = "^6.5.0"}
-flake8 = "^4.0.1"
-flake8-assertive = "^1.3.0"
-flake8-junit-report = "^2.1"
-green = "^3.4.2"
-isort = "^5.12.0"
-mypy = "^0.942"
-pydocstyle = "^6.1.1"
-pylint = "^2.15.0"
-ruff = "^0.0.262"
+black = "^24.4"
+coverage = {extras = ["toml"], version = "^7.5"}
+flake8 = "^7.0.0"
+flake8-assertive = "^2.1.0"
+flake8-junit-report = "^2.1.0"
+green = "^4.0.2"
+isort = "^5.13"
+mypy = "^1.10"
+pydocstyle = "^6.3"
+pylint = "^3.2"
+ruff = "^0.4"  # if using nix, comment this line and install nix package instead
 safety = "^1.10.3"
 unittest-xml-reporting = "^2.5.2"
-{%- if cookiecutter.use_clean_architecture | fix_boolean and  cookiecutter.add_fastapi_application | fix_boolean %}
-types-pytz = "^2023.3.0.0"
+{%- if cookiecutter.use_clean_architecture and  cookiecutter.add_fastapi_application %}
+types-pytz = "^2024.1.0"
 {%- endif %}
 
+
 [tool.poetry.group.test.dependencies]
-green = "^3.4.3"
-{%- if cookiecutter.use_clean_architecture | fix_boolean and  cookiecutter.add_fastapi_application | fix_boolean %}
-httpx = "^0.24.1"
+green = "^4.0.2"
+{%- if cookiecutter.use_clean_architecture and  cookiecutter.add_fastapi_application %}
+httpx = "^0.27"
 {%- endif %}
 
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.8.2"]
 build-backend = "poetry.masonry.api"
 
 
@@ -108,7 +109,7 @@ exclude_lines = [
 # or in whole files adding this comment at the top:
 #
 #    # mypy: ignore-errors
-python_version = 3.11
+python_version = 3.12
 # warn_return_any = true
 warn_unused_configs = true
 exclude = ".venv"
@@ -151,3 +152,24 @@ match-dir = "^(?!(tests|migrations)).*[pydocstyle]"
 
 [tool.ruff]
 line-length=100
+
+[tool.ruff.lint]
+select = [
+    "F", "E", "W", "D", "N", "S", "ANN", "B", "PL", "RUF",
+    "COM", "C4", "DTZ", "EM", "RET", "SIM", "TCH", "ARG", "PTH", "ERA"
+]
+ignore = [
+	"D100", "D104", "D203", "D213", "D407", "D413",
+	"ANN101", "ANN102", "FA102", "EM101",
+	"COM812", "S101", "RET504"
+]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+

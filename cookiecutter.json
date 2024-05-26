@@ -7,6 +7,5 @@
     "version": "0.1.0",
     "use_clean_architecture": true,
     "add_fastapi_application": false,
-    "add_repository_and_sqlalchemy": false,
-    "_extensions": ["filter.fix_boolean"]
+    "add_repository_and_sqlalchemy": false
 }
