@@ -1,11 +1,13 @@
 {
-    "distro_name": "mypackage",
-    "package_name": "mypackage",
-    "description": "one liner",
-    "author": "Your Name",
-    "author_email": "you@somewhere.com",
-    "version": "0.1.0",
-    "use_clean_architecture": true,
-    "add_fastapi_application": false,
-    "add_repository_and_sqlalchemy": false
+  "python_version": "3.13",
+  "distro_name": "mypackage",
+  "package_name": "mypackage",
+  "description": "one liner",
+  "author": "Your Name",
+  "author_email": "you@somewhere.com",
+  "version": "0.1.0",
+  "use_devenv": true,
+  "use_clean_architecture": true,
+  "add_fastapi_application": false,
+  "add_repository_and_sqlalchemy": false
 }

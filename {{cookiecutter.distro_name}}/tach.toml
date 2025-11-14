@@ -1,0 +1,39 @@
+interfaces = []
+exclude = [
+    "**/*__pycache__",
+    "**/*egg-info",
+    "**/docs",
+    "**/tests",
+    "**/venv",
+]
+source_roots = [
+    "src",
+]
+
+layers = [
+    "presentation",
+    "infrastructure",
+    "application",
+    "domain",
+]
+
+[[modules]]
+path = "{{cookiecutter.package_name}}.domain.**"
+layer = "domain"
+utility = true
+depends_on = []
+
+[[modules]]
+path = "{{cookiecutter.package_name}}.application.**"
+layer = "application"
+depends_on = []
+
+[[modules]]
+path = "{{cookiecutter.package_name}}.infrastructure.**"
+layer = "infrastructure"
+depends_on = []
+
+[[modules]]
+path = "{{cookiecutter.package_name}}.presentation.**"
+layer = "presentation"
+depends_on = []
