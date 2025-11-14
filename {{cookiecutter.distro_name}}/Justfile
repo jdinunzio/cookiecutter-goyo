@@ -1,0 +1,90 @@
+
+TEST_LOG_LEVEL := "error"
+
+# This help.
+[default]
+@help:
+    echo -e "Development and CI set of task. Use \`just <<task>>\`, where tasks is:\n\n"
+    just --list
+
+# Check the project for linting issues.
+[group("dev")]
+@lint-check:
+    uv run ruff --version
+    uv run ruff check src/
+
+# Fix linting issues.
+[group("dev")]
+@lint-fix:
+    uv run ruff format src/
+
+# Check the project for typing issues.
+[group("dev")]
+@type-check:
+    uv run ty version
+    uv run ty check
+
+# Check the project for dependency relationships.
+[group("dev")]
+@dep-check:
+    uv run tach --version
+    uv run tach check
+
+# Check the project for docstring documentation.
+[group("dev")]
+@docstyle:
+    echo "pydocstyle `pydocstyle --version`"
+    uv run pydocstyle src/ tests/ && echo "All checks passed!"
+
+# Run common development checks.
+[group("dev")]
+@dev-check:
+	echo -e '\033[34m**** Linting...\033[0m'
+	just lint-fix
+	echo -e '\033[34m\n\n**** Docstyling...\033[0m'
+	just docstyle
+	echo -e '\033[34m\n\n**** Type checking...\033[0m'
+	just type-check
+	echo -e '\033[34m\n\n**** Unit Testing...\033[0m'
+	just test-unit
+	echo -e '\033[34m\n\n**** Integration Testing...\033[0m'
+	just test-integration
+	echo -e '\n'
+
+# Run unit tests.
+[group("testing")]
+@test-unit:
+    LOG_LEVEL={TEST_LOG_LEVEL} uv run green -vvvq tests/unit
+    
+# Run integration tests.
+[group("testing")]
+@test-integration:
+    LOG_LEVEL={TEST_LOG_LEVEL} uv run green -vvvq tests/integration
+
+# Run all tests.
+[group("testing")]
+@tests:
+    just test-unit
+    just test-integration
+
+
+# Run all tests with coverage.
+[group("testing")]
+@coverage:
+	@LOG_LEVEL=${TEST_LOG_LEVEL} uv run green -vvvq -s 1 --run-coverage tests/
+
+# Generate junit report for unit tests.
+[group("testing")]
+@report-test-unit:
+	@LOG_LEVEL=${TEST_LOG_LEVEL} uv run python -m xmlrunner discover -o ./reports/junit/tests/unit tests/unit/
+
+# Generate junit report for integration tests.
+[group("testing")]
+@report-test-integration:
+	@LOG_LEVEL=${TEST_LOG_LEVEL} poetry run python -m xmlrunner discover -o ./reports/junit/tests/integration tests/integration/
+
+# Generate junit report for all tests.
+[group("testing")]
+@report-tests:
+    just report-test-unit
+    just report-test-integration

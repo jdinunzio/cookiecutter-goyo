@@ -1,128 +1,64 @@
-[tool.poetry]
+[project]
 name = "{{cookiecutter.package_name}}"
 version = "{{cookiecutter.version}}"
 description = "{{cookiecutter.description}}"
-authors = ["{{cookiecutter.author}} <{{cookiecutter.author_email}}>"]
+readme = "README.md"
+authors = [
+  {
+    name = "{{cookiecutter.author}}",
+    email = "{{cookiecutter.author_email}}"
+  }
+]
+requires-python = "{{cookiecutter.python_version}}"
+dependencies = [
+    "pydantic>=2.12.4",
+]
 
-
-[tool.poetry.dependencies]
-python = "^3.12.2"
-pip = "^24.0"
-starlette = "^0.37"  # for its config and .env features
-python-json-logger = "^2.0.7"
-{%- if cookiecutter.use_clean_architecture %}
-  {%- if cookiecutter.add_fastapi_application %}
-fastapi = "^0.111"
-uvicorn = "^0.29"
-  {%- endif %}
-  {%- if cookiecutter.add_repository_and_sqlalchemy  %}
-psycopg2-binary = "^2.9.9"
-sqlalchemy = "^2.0.30"
-  {%- endif %}
-  {%- if cookiecutter.add_fastapi_application  or cookiecutter.add_fastapi_application %}
-pydantic = "^2.7"
-pytz = "^2024.1"
-  {%- endif %}
-{%- endif %}
-
-
-[tool.poetry.group.dev.dependencies]
-black = "^24.4"
-coverage = {extras = ["toml"], version = "^7.5"}
-flake8 = "^7.0.0"
-flake8-assertive = "^2.1.0"
-flake8-junit-report = "^2.1.0"
-green = "^4.0.2"
-isort = "^5.13"
-mypy = "^1.10"
-pydocstyle = "^6.3"
-pylint = "^3.2"
-ruff = "^0.4"  # if using nix, comment this line and install nix package instead
-safety = "^1.10.3"
-unittest-xml-reporting = "^2.5.2"
-{%- if cookiecutter.use_clean_architecture and  cookiecutter.add_fastapi_application %}
-types-pytz = "^2024.1.0"
-{%- endif %}
-
-
-[tool.poetry.group.test.dependencies]
-green = "^4.0.2"
-{%- if cookiecutter.use_clean_architecture and  cookiecutter.add_fastapi_application %}
-httpx = "^0.27"
-{%- endif %}
-
+[project.scripts]
+newtemplate = "newtemplate:main"
 
 [build-system]
-requires = ["poetry>=1.8.2"]
-build-backend = "poetry.masonry.api"
+requires = ["uv_build>=0.8.23,<0.9.0"]
+build-backend = "uv_build"
 
-
-[tool.pylint.MASTER]
-# NOTE: To disable pylint in one specific line of a file, put a comment like this one:
-#   # pylint: disable=invalid-name
-#
-# To disable all warning in a file use:
-#   # pylint: skip-file
-#
-# You can generate see all possible config options with:
-#   $ pylint --generate-rcfile
-disable = [
-    "missing-module-docstring",
-    "missing-function-docstring",
-]
-# ignored-modules=logging,foo,bar,baz
-
-
-[tool.black]
-line-length = 100
-
-
-[tool.isort]
-profile = "black"
-
-
-[tool.coverage.run]
-source = [
-    "./src/",
-]
-omit = [
-    # omit anything in the tests directory
-    "./tests/*",
+[dependency-groups]
+dev = [
+    "green>=4.0.2",
+    "pydocstyle>=6.3.0",
+    "tach>=0.29.0",
+    {%- if cookiecutter.use_devenv %}
+    # these tools are installed by devenv, since their binaries installed with `pip` are dynamically linked
+    # and nix requires statically linked ones.
+    # "ruff>=0.14.5",
+    # "ty>=0.0.1a26",
+    {%- else %}
+    "ruff>=0.14.5",
+    "ty>=0.0.1a26",
+    {%- endif %}
 ]
 
+[tool.ruff]
+line-length=100
 
-[tool.coverage.report]
-exclude_lines = [
-    # Have to re-enable the standard pragma
-    "pragma: no cover",
-
-    # Don't complain if tests don't hit abstract methods:
-    "raise NotImplementedError",
+[tool.ruff.lint]
+select = [
+    "F", "E", "W", "D", "N", "S", "B", "ANN", "PL", "RUF",
+    "COM", "C4", "DTZ", "EM", "RET", "SIM", "TCH", "ARG", "PTH", "ERA"
 ]
+ignore = [
+	"D100", "D104", "D203", "D213", "D407", "D413",
+	"FA102", "EM101",
+	"COM812", "S101", "RET504"
+]
+fixable = ["ALL"]
+unfixable = []
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
-[tool.mypy]
-# Note: you can silence errors in specific lines adding a comment like this one:
-#
-#    # type: ignore
-#
-# or in whole files adding this comment at the top:
-#
-#    # mypy: ignore-errors
-python_version = 3.12
-# warn_return_any = true
-warn_unused_configs = true
-exclude = ".venv"
-
-# [tool.mypy-mycode.foo.*]
-# disallow_untyped_defs = true
-#
-# [tool.mypy-mycode.bar]
-# warn_return_any = false
-#
-# [tool.mypy-somelibrary]
-# ignore_missing_imports = true
-
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
 
 [tool.pydocstyle]
 # From http://www.pydocstyle.org/en/stable/usage.html#in-file-configuration
@@ -148,28 +84,3 @@ ignore = [
 match = "(?!test_)(?!__init__).*\\.py"
 match-dir = "^(?!(tests|migrations)).*[pydocstyle]"
 #inherit = false
-
-
-[tool.ruff]
-line-length=100
-
-[tool.ruff.lint]
-select = [
-    "F", "E", "W", "D", "N", "S", "ANN", "B", "PL", "RUF",
-    "COM", "C4", "DTZ", "EM", "RET", "SIM", "TCH", "ARG", "PTH", "ERA"
-]
-ignore = [
-	"D100", "D104", "D203", "D213", "D407", "D413",
-	"ANN101", "ANN102", "FA102", "EM101",
-	"COM812", "S101", "RET504"
-]
-fixable = ["ALL"]
-unfixable = []
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.ruff.format]
-quote-style = "double"
-docstring-code-format = true
-

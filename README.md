@@ -2,16 +2,19 @@
 
 Cookiecutter template to create new, modern python projects.
 
+This template supports [devenv](https://devenv.sh/) and [direnv](https://direnv.net/),
+which allows to install all dependencies by just `cd`-ing to the project's folder.
+
 ## Features
 
 * Use of `pyproject.toml` for package configuration.
+* Support for `devenv`.
 * Support for clean architecture.
-* Developer friendly command invocation with `make`.
+* Developer friendly command invocation with `just`.
 * Unit and integration tests with `unittest`, or `green`.
-* Linting with `flake8` and `pylint`.
-* Typechecking with `mypy`.
+* Linting and formatting with `ruff`.
+* Typechecking with `ty`.
 * Code coverage with `coverage`.
-* Code reformatting with `black`.
 * Reporting of test and linting results in `junit`.
 * Sane `.gitignore`.
 
