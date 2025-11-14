@@ -33,7 +33,7 @@ class SimpleEnvFactory(Factory):  # pylint: disable=too-few-public-methods
         session_maker = sessionmaker(bind=self.alchemy_engine)
 
         SimpleEnvFactory.uow_service = AlchemyUOWService(self.alchemy_engine, session_maker)
-        return cast(UOWService, self.uow_service)
+        return cast("UOWService", self.uow_service)
 
     def make_alchemy_engine(self) -> Engine:
         """Create and return (or use memoised) SQLAlchemy engine.
@@ -46,4 +46,4 @@ class SimpleEnvFactory(Factory):  # pylint: disable=too-few-public-methods
 
         engine = create_engine(f"sqlite:///{config.SQLITE_DB_FILE_NAME}")
         SimpleEnvFactory.alchemy_engine = engine
-        return cast(Engine, self.alchemy_engine)
+        return cast("Engine", self.alchemy_engine)

@@ -101,7 +101,7 @@ class TestAlchemyTodoListRepository(TestCase, AlchemyMixin):
         """Trying to update a non-existent entity raises."""
         # given an uuid for a non-existent todo-list
         todolist_id = uuid.uuid4()
-        fake_update = TodoListPartial(**self.new_todolist().dict())
+        fake_update = TodoListPartial(**self.new_todolist().model_dump())
 
         # when trying to delete it
         with self.service.get_uow() as uow, self.assertRaises(RecordNotFoundError):
@@ -118,12 +118,12 @@ class TestAlchemyTodoListRepository(TestCase, AlchemyMixin):
             updated_todo_list = uow.todolist_repo.update(todo_list.id, patch)
 
         # then the resulting TodoList has the patched fields updated
-        patch_dict = patch.dict(exclude_unset=True)
-        updated_dict = updated_todo_list.dict(include=patch_dict)
+        patch_dict = patch.model_dump(exclude_unset=True)
+        updated_dict = updated_todo_list.model_dump(include=patch_dict)
         self.assertEqual(updated_dict, patch_dict)
         # and the remaining fields were not modified
-        original_unchanged = todo_list.dict(exclude=set(patch_dict.keys()))
-        updated_unchanged = updated_todo_list.dict(exclude=set(patch_dict.keys()))
+        original_unchanged = todo_list.model_dump(exclude=set(patch_dict.keys()))
+        updated_unchanged = updated_todo_list.model_dump(exclude=set(patch_dict.keys()))
         self.assertEqual(updated_unchanged, original_unchanged)
 
     # Support methods

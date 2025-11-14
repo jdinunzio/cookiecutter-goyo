@@ -54,11 +54,11 @@ class AlchemyTodoListRepository(TodoListRepository):
             msg = f"can't update todolist: ${todolist_id} not found"
             raise RecordNotFoundError(msg)
 
-        for key, val in todolist_update.dict(exclude_unset=True).items():
+        for key, val in todolist_update.model_dump(exclude_unset=True).items():
             setattr(record, key, val)
 
         self.session.flush()
-        return self.mapper.model_from_record(cast(TodoListRecord, record))
+        return self.mapper.model_from_record(cast("TodoListRecord", record))
 
     def get(self, todolist_id: UUID) -> TodoList | None:
         """Get an instance of TodoList, given its id.
@@ -73,7 +73,7 @@ class AlchemyTodoListRepository(TodoListRepository):
         if record is None:
             return None
 
-        model = self.mapper.model_from_record(cast(TodoListRecord, record))
+        model = self.mapper.model_from_record(cast("TodoListRecord", record))
         return model
 
     def retrieve(self) -> list[TodoList]:

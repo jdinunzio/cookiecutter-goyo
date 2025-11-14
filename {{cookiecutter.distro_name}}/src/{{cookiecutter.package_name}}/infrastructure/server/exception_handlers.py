@@ -37,7 +37,7 @@ def use_case_exception_handler(request: Request, error: Exception) -> Response:
     """
     return JSONResponse(
         status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-        content={"request_url": str(request.url), "message": cast(UseCaseError, error).message},
+        content={"request_url": str(request.url), "message": cast("UseCaseError", error).message},
     )
 
 

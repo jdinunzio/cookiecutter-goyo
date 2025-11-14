@@ -21,19 +21,19 @@ layers = [
 path = "{{cookiecutter.package_name}}.domain.**"
 layer = "domain"
 utility = true
-depends_on = []
+depends_on = ["{{cookiecutter.package_name}}.domain.**"]
 
 [[modules]]
 path = "{{cookiecutter.package_name}}.application.**"
 layer = "application"
-depends_on = []
+depends_on = ["{{cookiecutter.package_name}}.application.**"]
 
 [[modules]]
 path = "{{cookiecutter.package_name}}.infrastructure.**"
 layer = "infrastructure"
-depends_on = []
+depends_on = ["{{cookiecutter.package_name}}.infrastructure.**"]
 
 [[modules]]
 path = "{{cookiecutter.package_name}}.presentation.**"
 layer = "presentation"
-depends_on = []
+depends_on = ["{{cookiecutter.package_name}}.presentation.**"]

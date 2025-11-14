@@ -5,8 +5,8 @@ from {{cookiecutter.package_name}}.application.interfaces.db.uowservice import U
 {%- endif %}
 
 
-class Factory(abc.ABC):  # pylint: disable=too-few-public-methods
-    """Abstract factory for Payment Gateway."""
+class Factory(abc.ABC):{% if not cookiecutter.add_repository_and_sqlalchemy %}# noqa: B024{% endif %}
+    """Abstract factory for Application services."""
 {%- if cookiecutter.add_repository_and_sqlalchemy %}
 
     @abc.abstractmethod

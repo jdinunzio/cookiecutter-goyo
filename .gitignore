@@ -1,9 +1,10 @@
 tmp/
 .venv/
 __pycache__/
-cookie-src
 .python-version
 .idea
+project-root
+project-src
 
 # Devenv
 .devenv*

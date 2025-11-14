@@ -8,7 +8,7 @@ class TodoListMapper:
     @staticmethod
     def record_from_model(model: TodoList) -> TodoListRecord:
         """Convert TodoList domain model into SQLAlchemy TodoListRecord."""
-        return TodoListRecord(**model.dict())
+        return TodoListRecord(**model.model_dump())
 
     @staticmethod
     def model_from_record(record: TodoListRecord) -> TodoList:
