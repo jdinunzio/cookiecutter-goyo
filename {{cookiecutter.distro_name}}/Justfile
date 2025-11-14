@@ -61,7 +61,7 @@ TEST_LOG_LEVEL := "error"
 # Run integration tests.
 [group("testing")]
 @test-integration:
-    LOG_LEVEL={{TEST_LOG_LEVEL}} uv run green -vvvq tests/integration
+    LOG_LEVEL={{TEST_LOG_LEVEL}} uv run green -vvvq -s 1 tests/integration
 
 # Run all tests.
 [group("testing")]
