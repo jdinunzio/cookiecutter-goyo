@@ -4,15 +4,10 @@ version = "{{cookiecutter.version}}"
 description = "{{cookiecutter.description}}"
 readme = "README.md"
 authors = [
-  {
-    name = "{{cookiecutter.author}}",
-    email = "{{cookiecutter.author_email}}"
-  }
+  { name = "{{cookiecutter.author}}", email = "{{cookiecutter.author_email}}" },
 ]
-requires-python = "{{cookiecutter.python_version}}"
-dependencies = [
-    "pydantic>=2.12.4",
-]
+requires-python = ">={{cookiecutter.python_version}}"
+dependencies = ["pydantic>=2.12.4"]
 
 [project.scripts]
 newtemplate = "newtemplate:main"
@@ -38,17 +33,43 @@ dev = [
 ]
 
 [tool.ruff]
-line-length=100
+line-length = 100
 
 [tool.ruff.lint]
 select = [
-    "F", "E", "W", "D", "N", "S", "B", "ANN", "PL", "RUF",
-    "COM", "C4", "DTZ", "EM", "RET", "SIM", "TCH", "ARG", "PTH", "ERA"
+  "F",
+  "E",
+  "W",
+  "D",
+  "N",
+  "S",
+  "B",
+  "ANN",
+  "PL",
+  "RUF",
+  "COM",
+  "C4",
+  "DTZ",
+  "EM",
+  "RET",
+  "SIM",
+  "TCH",
+  "ARG",
+  "PTH",
+  "ERA",
 ]
 ignore = [
-	"D100", "D104", "D203", "D213", "D407", "D413",
-	"FA102", "EM101",
-	"COM812", "S101", "RET504"
+  "D100",
+  "D104",
+  "D203",
+  "D213",
+  "D407",
+  "D413",
+  "FA102",
+  "EM101",
+  "COM812",
+  "S101",
+  "RET504",
 ]
 fixable = ["ALL"]
 unfixable = []
@@ -77,9 +98,18 @@ docstring-code-format = true
 #        pass
 
 ignore = [
-	"D100", "D105", "D106", "D107",
-	"D203", "D211", "D213",
-	"D400", "D405", "D406", "D407", "D413",
+  "D100",
+  "D105",
+  "D106",
+  "D107",
+  "D203",
+  "D211",
+  "D213",
+  "D400",
+  "D405",
+  "D406",
+  "D407",
+  "D413",
 ]
 match = "(?!test_)(?!__init__).*\\.py"
 match-dir = "^(?!(tests|migrations)).*[pydocstyle]"
