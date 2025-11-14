@@ -83,7 +83,7 @@ TEST_LOG_LEVEL := "error"
 # Generate junit report for integration tests.
 [group("testing")]
 @report-test-integration:
-	LOG_LEVEL={{TEST_LOG_LEVEL}} poetry run python -m xmlrunner discover -o ./reports/junit/tests/integration tests/integration/
+	LOG_LEVEL={{TEST_LOG_LEVEL}} uv run python -m xmlrunner discover -o ./reports/junit/tests/integration tests/integration/
 
 # Generate junit report for all tests.
 [group("testing")]
