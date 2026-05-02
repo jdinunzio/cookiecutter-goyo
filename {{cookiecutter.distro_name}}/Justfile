@@ -7,6 +7,11 @@ TEST_LOG_LEVEL := "error"
     echo -e "Development and CI set of task. Use \`just <<task>>\`, where tasks is:\n\n"
     just --list
 
+# Install project and development dependencies.
+[group("dev")]
+@install:
+    uv sync
+
 # Check the project for linting issues.
 [group("dev")]
 @lint-check:
