@@ -7,12 +7,17 @@ class AppError(Exception):
         self.message = message
 
 
+{%- if cookiecutter.add_repository_and_sqlalchemy %}
+
+
 class RepoError(AppError):
     """Base class for all repository exceptions."""
 
 
 class RecordNotFoundError(RepoError):
     """Record not found."""
+
+{%- endif %}
 
 
 class UseCaseError(AppError):

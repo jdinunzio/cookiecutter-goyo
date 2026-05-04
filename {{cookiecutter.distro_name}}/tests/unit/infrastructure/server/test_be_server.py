@@ -4,7 +4,9 @@ from unittest import TestCase
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
+{%- if cookiecutter.add_repository_and_sqlalchemy %}
 from {{cookiecutter.package_name}}.infrastructure.adapters.factory import FactoryType
+{%- endif %}
 from {{cookiecutter.package_name}}.infrastructure.server.be_server import API_PREFIX, create_app
 
 
@@ -17,7 +19,7 @@ class TestBeServer(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """Preparation steps that are executed once for the entire test case."""
-        cls.app = create_app(FactoryType.SIMPLE_ENV)
+        cls.app = create_app({% if cookiecutter.add_repository_and_sqlalchemy %}FactoryType.SIMPLE_ENV{% endif %})
         cls.client = TestClient(cls.app)
 
     def test_has_healthy_check_endpoints(self) -> None:

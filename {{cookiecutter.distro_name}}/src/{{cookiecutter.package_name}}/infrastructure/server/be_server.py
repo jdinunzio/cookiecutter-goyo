@@ -10,7 +10,9 @@ from {{cookiecutter.package_name}}.infrastructure.adapters.config import (
     ENV_TYPE,
     LOG_LEVEL,
 )
+{%- if cookiecutter.add_repository_and_sqlalchemy %}
 from {{cookiecutter.package_name}}.infrastructure.adapters.factory import get_factory
+{%- endif %}
 from {{cookiecutter.package_name}}.infrastructure.adapters.logger import init_logging
 from {{cookiecutter.package_name}}.infrastructure.server.exception_handlers import add_exception_handlers
 from {{cookiecutter.package_name}}.infrastructure.server.health_router import router as health_router
@@ -52,25 +54,27 @@ def create_app(env_type: str | None = None) -> FastAPI:
         extra={"server_name": BE_SERVER_NAME, "log_level": LOG_LEVEL},
     )
 
-    # get factory
-    env_type = env_type if env_type is not None else ENV_TYPE
-    factory = get_factory(env_type)
-
     # instrumentation
     # init_sentry()  # noqa: ERA001
     # init_otel()  # noqa: ERA001
 
-    # db init
+{%- if cookiecutter.add_repository_and_sqlalchemy %}
+    # get factory and init db
+    env_type = env_type if env_type is not None else ENV_TYPE
+    factory = get_factory(env_type)
     uow_service = factory.make_uow_service()
     uow_service.init_db()
+{%- endif %}
 
     # define fastapi middlewares
     middlewares: list[Middleware] = []
 
     # create fastapi app, and add services to its state
     app = FastAPI(middlewares=middlewares)
+{%- if cookiecutter.add_repository_and_sqlalchemy %}
     app.state.factory = factory
     app.state.uow_service = uow_service
+{%- endif %}
 
     include_routers(app)
     add_exception_handlers(app)
